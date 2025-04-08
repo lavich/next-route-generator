@@ -58,17 +58,21 @@ Import the generated routes and use `RouteGenerator` to create URLs:
 
 ```typescript
 import { RouteGenerator } from "next-route-generator/routeGenerator";
-import { pages } from "../src/generated/pages"; // Generated file
+import { pages } from "../src/pages"; // The generated file
 
 // Create an instance of RouteGenerator
-const routeGenerator = new RouteGenerator(pages);
+const routeGenerator = new RouteGenerator(pages, {
+  basePath: "/my-app", // (optional) a base path that will be prepended to all generated routes
+});
 
-// Generate a URL
-const homeUrl = routeGenerator.getRouteByPageName("HomePage"); // /home
+// Generate a URL for a static page
+const homeUrl = routeGenerator.getRouteByPageName("HomePage"); // /my-app/home
+
+// Generate a URL with dynamic parameters
 const elementUrl = routeGenerator.getRouteByPageName("ElementPage", {
   params: { id: "123" },
   query: { foo: "bar" },
-}); // /elements/123?foo=bar
+}); // /my-app/elements/123?foo=bar
 ```
 
 ### 3. Example of the Generated `routes.ts` file
@@ -110,6 +114,21 @@ Parameters
 #### `RouteGenerator`
 
 A class for generating URLs based on the generated routes.
+
+Constructor:
+
+```typescript
+constructor(
+  private readonly pages: Pages,
+  private options?: RouteGeneratorOptions,
+)
+```
+
+- `pages` (`P extends Pages`): The typed pages object that contains all the routes.
+
+- `options` (`RouteGeneratorOptions`, optional): Optional configuration object.
+
+  - `basePath` (`string`, optional): A base path to prepend to all generated URLs.
 
 Methods
 

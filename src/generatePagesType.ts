@@ -10,11 +10,11 @@ export function generatePagesType(directory: string, output = directory): void {
   const pages = generatePages(directory);
   const typeDefinition = `import type { Pages } from "${packageJson.name}/routeGenerator";\n
 export const pages = ${JSON.stringify(pages, null, 2)} as const satisfies Pages;\n`;
-  fs.writeFileSync(path.join(output, "routes.ts"), typeDefinition);
+  fs.writeFileSync(path.join(output, "pages.ts"), typeDefinition);
 }
 
 const isPageFile = (item: Dirent) =>
-  item.isFile() && (item.name.endsWith(".tsx") || item.name.endsWith(".jsx"));
+  item.isFile() && /(page)\.(tsx|jsx)$/i.test(item.name);
 
 export function generatePages(directory: string): Pages {
   try {
